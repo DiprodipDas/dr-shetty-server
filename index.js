@@ -18,6 +18,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
 try{
   const serviceCollection= client.db('shettyChamber').collection('services');
+  const reviewCollection= client.db('shettyChamber').collection('reviews');
 
   app.get('/services',async(req,res)=>{
     const query={}
@@ -32,6 +33,14 @@ try{
     const query={_id: ObjectId(id)};
     const service= await serviceCollection.findOne(query);
     res.send(service);
+  })
+
+  //review api
+  app.post('/reviews',async(req,res)=>{
+    const review= req.body;
+    const result= await reviewCollection.insertOne(review);
+    res.send(result);
+
   })
 }
 finally{
